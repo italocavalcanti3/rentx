@@ -13,11 +13,12 @@ import {
   Header,
   TotalCars,
   HeaderContent,
+  CarList,
 } from './styles';
 
 export function Home() {
 
-  const carDataOne = {
+  const carData = {
     brand: 'Audi',
     name: 'RS 5 Coupé',
     rent: {
@@ -25,16 +26,6 @@ export function Home() {
       price: 120
     },
     thumbnail: 'https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png',
-  };
-
-  const carDataTwo = {
-    brand: 'Porshe',
-    name: 'Panamera',
-    rent: {
-      period: 'Ao dia',
-      price: 340
-    },
-    thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-Transparent-File.png',
   };
 
   return (
@@ -56,8 +47,13 @@ export function Home() {
         </HeaderContent>
       </Header>
 
-      <Car data={carDataOne} />
-      <Car data={carDataTwo} />
+      <CarList 
+      data={[1,2,3,4,5]}
+      keyExtractor={item => String(item)}
+      renderItem={({item}) => <Car data={carData} />}
+      />
+        
+
     </Container>
   );
 }

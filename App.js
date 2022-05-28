@@ -8,11 +8,13 @@ import { Inter_400Regular, Inter_500Medium } from "@expo-google-fonts/inter";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 
+import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import { ThemeProvider } from "styled-components";
 import theme from "./src/styles/theme";
 
-import { Home } from "./src/screens/Home";
-import { View } from "react-native";
+import { CarDetails } from "./src/screens/CarDetails";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -49,16 +51,10 @@ export default function App() {
   }
 
   return (
-    //Quando tiver o Gesture Handler:
-    // <GestureHandlerRootView
-    //   onLayout={onLayoutRootView}
-    //   style={{ flex: 1 }}
-    // >
-    // </GestureHandlerRootView>
-    <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+    <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
-        <Home />
+        <CarDetails />
       </ThemeProvider>
-    </View>
+    </GestureHandlerRootView>
   );
 }
