@@ -7,6 +7,7 @@ import {
 } from 'react-native-calendars';
 
 import { Feather } from '@expo/vector-icons';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 LocaleConfig.locales['pt-br'] = {
   monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
@@ -26,7 +27,7 @@ export function Calendar() {
       renderArrow={(direction) =>
         <Feather
           name={ direction === 'left' ? 'chevron-left' : 'chevron-right' }
-          size={24}
+          size={RFValue(24)}
           color={theme.colors.text} 
         />
       }
