@@ -14,7 +14,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from "styled-components";
 import theme from "./src/styles/theme";
 
-import { CarDetails } from "./src/screens/CarDetails";
+import { Scheduling } from "./src/screens/Scheduling";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -31,7 +31,7 @@ export default function App() {
           Inter_500Medium,
         });
       } catch (error) {
-        console.warn(e);
+        console.warn(error);
       } finally {
         setAppIsReady(true);
       }
@@ -53,7 +53,7 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
-        <CarDetails />
+        <Scheduling />
       </ThemeProvider>
     </GestureHandlerRootView>
   );
