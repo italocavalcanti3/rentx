@@ -1,4 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
+
+import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+import { ThemeProvider } from "styled-components";
+import theme from "./src/styles/theme";
+
 import {
   Archivo_400Regular,
   Archivo_500Medium,
@@ -8,13 +15,7 @@ import { Inter_400Regular, Inter_500Medium } from "@expo-google-fonts/inter";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 
-import 'react-native-gesture-handler';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
-import { ThemeProvider } from "styled-components";
-import theme from "./src/styles/theme";
-
-import { SchedulingComplete } from "./src/screens/SchedulingComplete";
+import { Routes } from "./src/routes";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -53,7 +54,7 @@ export default function App() {
   return (
     <GestureHandlerRootView onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
-        <SchedulingComplete />
+        <Routes />
       </ThemeProvider>
     </GestureHandlerRootView>
   );

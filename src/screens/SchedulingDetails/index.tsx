@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
@@ -46,12 +48,17 @@ import {
 
 export function SchedulingDetails() {
   const theme = useTheme();
+  const navigation = useNavigation<any>();
+
+  function handleConfirmRental() {
+    navigation.navigate('SchedulingComplete');
+  }
 
   return (
     <Container>
 
       <Header>
-        <BackButton onPress={() => { }} />
+        <BackButton onPress={navigation.goBack} />
       </Header>
 
       <CarImages>
@@ -125,7 +132,11 @@ export function SchedulingDetails() {
       </Content>
 
       <Footer>
-        <Button title='Confirmar' />
+        <Button
+          title='Confirmar'
+          color={theme.colors.success}
+          onPress={handleConfirmRental}
+        />
       </Footer>
 
     </Container>
