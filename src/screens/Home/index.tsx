@@ -1,11 +1,18 @@
-import React from 'react';
-import { StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, StatusBar } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+
+import api from '../../services/api';
+import { CarDTO } from '../../dtos/CarDTO';
 
 import { useNavigation } from '@react-navigation/native';
 
+import { useTheme } from 'styled-components';
+
+
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
+import { Loading } from '../../components/Loading';
 
 import {
   Container,
@@ -16,7 +23,10 @@ import {
 } from './styles';
 
 export function Home() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [cars, setCars] = useState<CarDTO[]>([]);
   const navigation = useNavigation<any>();
+  const theme = useTheme();
 
   const carData = {
     brand: 'Audi',
@@ -31,6 +41,25 @@ export function Home() {
   function handleCarDetails() {
     navigation.navigate('CarDetails');
   }
+
+  useEffect(() => {
+    async function fetchCars() {
+      try {
+        setIsLoading(true);
+        const response = await api.get('/cars');
+        setCars(response.data);
+      } catch (error) {
+        console.log(error);
+        Alert.alert('Erro ao buscar lista de carros.');
+      } finally {
+        setIsLoading(false);
+      }
+      
+    }
+
+    fetchCars();
+    
+  }, []);
 
   return (
     <Container>
@@ -51,15 +80,17 @@ export function Home() {
         </HeaderContent>
       </Header>
 
-      <CarList 
-      data={[1,2,3,4,5]}
-      keyExtractor={item => String(item)}
-      renderItem={({item}) => 
-        <Car data={carData} onPress={handleCarDetails} />
+      { isLoading ?
+        <Loading /> :
+        <CarList 
+        data={cars}
+        keyExtractor={item => item.id}
+        renderItem={({item}) => 
+          <Car data={item} onPress={handleCarDetails} />
+        }
+        />
       }
-      />
         
-
     </Container>
   );
 }
