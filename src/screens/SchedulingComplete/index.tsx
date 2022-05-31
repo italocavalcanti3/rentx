@@ -27,6 +27,11 @@ export function SchedulingComplete() {
 
   return (
     <Container>
+      <StatusBar
+        barStyle='light-content'
+        backgroundColor='transparent'
+        translucent
+      />
       <LogoSvg width={dimensions.width} />
 
       <Content>
@@ -42,12 +47,7 @@ export function SchedulingComplete() {
       <Footer>
         <ConfirmButton title='OK' onPress={handleSchedulingConfirm} />
       </Footer>
-      
-      <StatusBar 
-        barStyle='light-content'
-        backgroundColor='transparent'
-        translucent
-      />
+
     </Container>
   );
 }

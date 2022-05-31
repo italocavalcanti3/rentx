@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -56,6 +57,11 @@ export function SchedulingDetails() {
 
   return (
     <Container>
+      <StatusBar
+        barStyle='dark-content'
+        backgroundColor='transparent'
+        translucent
+      />
 
       <Header>
         <BackButton onPress={navigation.goBack} />
@@ -84,17 +90,17 @@ export function SchedulingDetails() {
         </Details>
 
         <Accessories>
-          <Accessory name='380Km/h' icon={speedSvg}/>
-          <Accessory name='3.2s' icon={acceleration}/>
-          <Accessory name='800 HP' icon={force}/>
-          <Accessory name='Gasolina' icon={gasoline}/>
-          <Accessory name='Auto' icon={exchange}/>
-          <Accessory name='2 pessoas' icon={people}/>
+          <Accessory name='380Km/h' icon={speedSvg} />
+          <Accessory name='3.2s' icon={acceleration} />
+          <Accessory name='800 HP' icon={force} />
+          <Accessory name='Gasolina' icon={gasoline} />
+          <Accessory name='Auto' icon={exchange} />
+          <Accessory name='2 pessoas' icon={people} />
         </Accessories>
 
         <RentalPeriod>
           <CalendarIcon>
-            <Feather 
+            <Feather
               name='calendar'
               size={RFValue(24)}
               color={theme.colors.shape}
@@ -106,7 +112,7 @@ export function SchedulingDetails() {
             <DateValue>18/06/2022</DateValue>
           </DateInfo>
 
-          <Feather 
+          <Feather
             name='chevron-right'
             size={RFValue(10)}
             color={theme.colors.text}

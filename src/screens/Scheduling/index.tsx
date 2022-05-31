@@ -32,10 +32,15 @@ export function Scheduling() {
 
   return (
     <Container>
+      <StatusBar
+        barStyle='light-content'
+        backgroundColor='transparent'
+        translucent
+      />
       <Header>
-        <BackButton 
-        color={theme.colors.shape}
-        onPress={navigation.goBack} 
+        <BackButton
+          color={theme.colors.shape}
+          onPress={navigation.goBack}
         />
 
         <Title>
@@ -66,14 +71,10 @@ export function Scheduling() {
       </Content>
 
       <Footer>
-        <Button title='Confirmar' onPress={handleConfirmRental}/>
+        <Button title='Confirmar' onPress={handleConfirmRental} />
       </Footer>
 
-      <StatusBar 
-        barStyle='light-content'
-        backgroundColor='transparent'
-        translucent
-      />
+
     </Container>
   );
 }

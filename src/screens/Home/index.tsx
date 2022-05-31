@@ -7,9 +7,6 @@ import { CarDTO } from '../../dtos/CarDTO';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { useTheme } from 'styled-components';
-
-
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
 import { Loading } from '../../components/Loading';
@@ -26,20 +23,9 @@ export function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [cars, setCars] = useState<CarDTO[]>([]);
   const navigation = useNavigation<any>();
-  const theme = useTheme();
 
-  const carData = {
-    brand: 'Audi',
-    name: 'RS 5 Coupé',
-    rent: {
-      period: 'Ao dia',
-      price: 120
-    },
-    thumbnail: 'https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png',
-  };
-
-  function handleCarDetails() {
-    navigation.navigate('CarDetails');
+  function handleCarDetails(car: CarDTO) {
+    navigation.navigate('CarDetails', { car });
   }
 
   useEffect(() => {
@@ -86,7 +72,7 @@ export function Home() {
         data={cars}
         keyExtractor={item => item.id}
         renderItem={({item}) => 
-          <Car data={item} onPress={handleCarDetails} />
+          <Car data={item} onPress={() => handleCarDetails(item)} />
         }
         />
       }
