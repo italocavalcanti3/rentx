@@ -17,7 +17,7 @@ import {
   CardImage,
 } from './styles';
 
-interface Props extends RectButtonProps{
+interface Props extends RectButtonProps {
   data: CarDTO;
 }
 
