@@ -11,7 +11,7 @@ export function Loading() {
 
   return(
     <Container>
-      <ActivityIndicator size={80} color={theme.colors.main} />
+      <ActivityIndicator size='large' color={theme.colors.main} />
     </Container>
   );
 }

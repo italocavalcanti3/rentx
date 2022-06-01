@@ -1,21 +1,21 @@
-import React from 'react';
-import { StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, StatusBar, View } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { format } from 'date-fns';
 
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import { Button } from '../../components/Button';
 
-import speedSvg from '../../assets/speed.svg';
-import acceleration from '../../assets/acceleration.svg';
-import force from '../../assets/force.svg';
-import gasoline from '../../assets/gasoline.svg';
-import exchange from '../../assets/exchange.svg';
-import people from '../../assets/people.svg';
-
 import { Feather } from '@expo/vector-icons';
+
+import { getPlatformDate } from '../../utils/getPlatformDate';
+import { getAccessoryIcon } from '../../utils/getAccessortIcon';
+import { CarDTO } from '../../dtos/CarDTO';
+import api from '../../services/api';
+import { Loading } from '../../components/Loading';
 
 import { useTheme } from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -46,14 +46,58 @@ import {
   RentalPriceTotal,
 } from './styles';
 
+interface Params {
+  car: CarDTO;
+  dates: string[];
+}
+
+interface RentalPeriod {
+  start: string;
+  end: string;
+}
 
 export function SchedulingDetails() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [rentalPeriod, setRentalPeriod] = useState({} as RentalPeriod);
+
   const theme = useTheme();
   const navigation = useNavigation<any>();
 
-  function handleConfirmRental() {
-    navigation.navigate('SchedulingComplete');
+  const routes = useRoute();
+  const { car, dates } = routes.params as Params;
+
+  const rentTotal = Number(dates.length * car.rent.price);
+
+  async function handleConfirmRental() {
+    setIsLoading(true);
+    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+
+    const unavailable_dates = [
+      ...schedulesByCar.data.unavailable_dates,
+      ...dates
+    ];
+
+    api.put(`/schedules_bycars/${car.id}`, {
+      id: car.id,
+      unavailable_dates: unavailable_dates
+    }).then(() => {
+      navigation.navigate('SchedulingComplete')
+      setIsLoading(false);
+    }).catch(error => {
+      console.log(error);
+      Alert.alert('', 'Não foi possível confirmar o agendamento.')
+    });
+    
   }
+
+  useEffect(() => {
+
+    setRentalPeriod({
+      start: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
+      end: format(getPlatformDate(new Date(dates[dates.length -1])), 'dd/MM/yyyy')
+    });
+
+  }, []);
 
   return (
     <Container>
@@ -69,9 +113,7 @@ export function SchedulingDetails() {
 
       <CarImages>
         <ImageSlider
-          imagesUrl={[
-            'https://png.monster/wp-content/uploads/2020/11/2018-audi-rs5-4wd-coupe-angular-front-5039562b.png',
-          ]}
+          imagesUrl={car.photos}
         />
       </CarImages>
 
@@ -79,23 +121,27 @@ export function SchedulingDetails() {
 
         <Details>
           <Description>
-            <Brand>Lamborghini</Brand>
-            <Name>Huracan</Name>
+            <Brand>{car.brand}</Brand>
+            <Name>{car.name}</Name>
           </Description>
 
           <Rent>
             <Period>Ao dia</Period>
-            <Price>R$ 580</Price>
+            <Price>R$ {car.rent.price}</Price>
           </Rent>
         </Details>
 
         <Accessories>
-          <Accessory name='380Km/h' icon={speedSvg} />
-          <Accessory name='3.2s' icon={acceleration} />
-          <Accessory name='800 HP' icon={force} />
-          <Accessory name='Gasolina' icon={gasoline} />
-          <Accessory name='Auto' icon={exchange} />
-          <Accessory name='2 pessoas' icon={people} />
+          {
+            car.accessories.map(accessory => (
+              <Accessory
+                key={accessory.type}
+                name={accessory.name}
+                icon={getAccessoryIcon(accessory.type)}
+              />
+            ))
+          }
+          
         </Accessories>
 
         <RentalPeriod>
@@ -109,7 +155,7 @@ export function SchedulingDetails() {
 
           <DateInfo>
             <DateTitle>DE</DateTitle>
-            <DateValue>18/06/2022</DateValue>
+            <DateValue>{rentalPeriod.start}</DateValue>
           </DateInfo>
 
           <Feather
@@ -120,7 +166,7 @@ export function SchedulingDetails() {
 
           <DateInfo>
             <DateTitle>ATÉ</DateTitle>
-            <DateValue>18/06/2022</DateValue>
+            <DateValue>{rentalPeriod.end}</DateValue>
           </DateInfo>
 
         </RentalPeriod>
@@ -129,8 +175,8 @@ export function SchedulingDetails() {
 
           <RentalPriceLabel>TOTAL</RentalPriceLabel>
           <RentalPriceDetails>
-            <RentalPriceQuota>R$ 580 x3 diárias</RentalPriceQuota>
-            <RentalPriceTotal>R$ 2.900,00</RentalPriceTotal>
+            <RentalPriceQuota>{`R$ ${car.rent.price} x${dates.length} ${dates.length > 1 ? 'diárias' : 'diária'}`}</RentalPriceQuota>
+            <RentalPriceTotal>R$ {rentTotal}</RentalPriceTotal>
           </RentalPriceDetails>
 
         </RentalPrice>
@@ -138,11 +184,23 @@ export function SchedulingDetails() {
       </Content>
 
       <Footer>
-        <Button
-          title='Confirmar'
-          color={theme.colors.success}
-          onPress={handleConfirmRental}
-        />
+        { !isLoading ?
+          <Button
+            title='Alugar agora'
+            color={theme.colors.success}
+            onPress={handleConfirmRental}
+          /> :
+          <View style={{
+            width: '100%',
+            height: 72,
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 19,
+            backgroundColor: theme.colors.success,
+          }}>
+            <Loading />
+          </View>
+        }
       </Footer>
 
     </Container>
