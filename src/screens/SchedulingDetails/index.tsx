@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, StatusBar, View } from 'react-native';
+import { Alert, StatusBar } from 'react-native';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { format } from 'date-fns';
@@ -77,14 +77,21 @@ export function SchedulingDetails() {
       ...dates
     ];
 
+    await api.post('/schedules_byuser', {
+      user_id: 1,
+      car,
+      startDate: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
+      endDate: format(getPlatformDate(new Date(dates[dates.length -1])), 'dd/MM/yyyy')
+    });
+
     api.put(`/schedules_bycars/${car.id}`, {
       id: car.id,
       unavailable_dates: unavailable_dates
     }).then(() => {
       navigation.navigate('SchedulingComplete')
-      setIsLoading(false);
     }).catch(error => {
       console.log(error);
+      setIsLoading(false);
       Alert.alert('', 'Não foi possível confirmar o agendamento.')
     });
     
@@ -184,23 +191,13 @@ export function SchedulingDetails() {
       </Content>
 
       <Footer>
-        { !isLoading ?
-          <Button
-            title='Alugar agora'
-            color={theme.colors.success}
-            onPress={handleConfirmRental}
-          /> :
-          <View style={{
-            width: '100%',
-            height: 72,
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 19,
-            backgroundColor: theme.colors.success,
-          }}>
-            <Loading />
-          </View>
-        }
+        <Button
+          title='Alugar agora'
+          color={theme.colors.success}
+          onPress={handleConfirmRental}
+          enabled={!isLoading}
+          loading={isLoading}
+        />
       </Footer>
 
     </Container>

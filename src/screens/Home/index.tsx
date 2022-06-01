@@ -26,7 +26,7 @@ import {
 
 
 
-export function Home() {
+export function Home({...rest}: RectButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [cars, setCars] = useState<CarDTO[]>([]);
   const navigation = useNavigation<any>();
@@ -90,7 +90,7 @@ export function Home() {
         />
       }
 
-      <MyCarsButton onPress={handleOpenMyCars}>
+      <MyCarsButton {...rest} onPress={handleOpenMyCars}>
         <Ionicons 
           name='ios-car-sport'
           size={32}
