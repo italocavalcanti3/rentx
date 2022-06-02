@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-
-import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { ThemeProvider } from "styled-components";
