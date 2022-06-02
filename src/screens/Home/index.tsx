@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, StatusBar, StyleSheet } from 'react-native';
+import { Alert, StatusBar, StyleSheet, BackHandler } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import Animated, {
@@ -90,12 +90,17 @@ export function Home({...rest}: RectButtonProps) {
         Alert.alert('Erro ao buscar lista de carros.');
       } finally {
         setIsLoading(false);
-      }
-      
+      } 
     }
 
     fetchCars();
     
+  }, []);
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      return true;
+    });
   }, []);
 
   return (
@@ -111,9 +116,11 @@ export function Home({...rest}: RectButtonProps) {
             width={RFValue(108)}
             height={RFValue(12)}
           />
-          <TotalCars>
-            Total de {cars.length} carros
-          </TotalCars>
+          { !isLoading &&
+            <TotalCars>
+              Total de {cars.length} carros
+            </TotalCars>
+          }
         </HeaderContent>
       </Header>
 
