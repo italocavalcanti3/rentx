@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Alert, StatusBar } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
+import Animated from 'react-native-reanimated';
+
 import { Ionicons } from '@expo/vector-icons';
 
 import api from '../../services/api';
