@@ -45,7 +45,7 @@ export function CarDetails() {
 
   const route = useRoute();
   const { car } = route.params as Params;
-  
+
   const scrollY = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler(event => {
     scrollY.value = event.contentOffset.y;
@@ -94,13 +94,13 @@ export function CarDetails() {
           <BackButton onPress={navigation.goBack} />
         </Header>
 
-        <Animated.View style={[sliderCarsStyleAnimation]}>
-          <CarImages>
+        <CarImages>
+          <Animated.View style={[sliderCarsStyleAnimation]}>
             <ImageSlider
               imagesUrl={car.photos}
             />
-          </CarImages>
-        </Animated.View>
+          </Animated.View>
+        </CarImages>
       </Animated.View>
 
       <Animated.ScrollView
@@ -153,7 +153,7 @@ export function CarDetails() {
 const styles = StyleSheet.create({
   header: {
     position: 'absolute',
-    // overflow: 'scroll',
+    overflow: 'hidden',
     zIndex: 1
   },
 });

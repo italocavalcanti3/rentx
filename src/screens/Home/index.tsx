@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, StatusBar, StyleSheet, BackHandler } from 'react-native';
+import { Alert, StatusBar, StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import Animated, {
@@ -97,11 +97,11 @@ export function Home({...rest}: RectButtonProps) {
     
   }, []);
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      return true;
-    });
-  }, []);
+  // useEffect(() => {
+  //   BackHandler.addEventListener('hardwareBackPress', () => {
+  //     return true;
+  //   });
+  // }, []);
 
   return (
     <Container>
